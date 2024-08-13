@@ -1,7 +1,7 @@
-# Table of Contents
+# 目录
 
-- [Getting Started](01_getting_started/01_chapter.md)
-  - [Why Async?](01_getting_started/02_why_async.md)
+- [入门](01_getting_started/01_chapter.md)
+  - [为何异步？](01_getting_started/02_why_async.md)
   - [The State of Asynchronous Rust](01_getting_started/03_state_of_async_rust.md)
   - [`async`/`.await` Primer](01_getting_started/04_async_await_primer.md)
 - [Under the Hood: Executing `Future`s and Tasks](02_execution/01_chapter.md)

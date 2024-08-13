@@ -1,25 +1,30 @@
-# Getting Started
+# 入门
 
-Welcome to Asynchronous Programming in Rust! If you're looking to start writing
-asynchronous Rust code, you've come to the right place. Whether you're building
-a web server, a database, or an operating system, this book will show you
-how to use Rust's asynchronous programming tools to get the most out of your
-hardware.
+欢迎来到《Rust异步编程》！如果你想开始编写Rust异步代码，那么你来对地方了。无论你正在构建一个网络服务器、数据库，还是操作系统，这本书都会向你展示如何使用Rust的异步编程工具，以充分发挥硬件的性能。
 
-## What This Book Covers
+## 这本书包含什么
 
-This book aims to be a comprehensive, up-to-date guide to using Rust's async
-language features and libraries, appropriate for beginners and old hands alike.
+本书旨在成为一本全面且最新的指南，帮助你使用Rust的异步语言特性和库，无论你是初学者还是老手都适用。
 
-- The early chapters provide an introduction to async programming in general,
-and to Rust's particular take on it.
+- 前面几章介绍异步编程的基础概念，以及Rust对其独特的处理方式。
 
-- The middle chapters discuss key utilities and control-flow tools you can use
-when writing async code, and describe best-practices for structuring libraries
-and applications to maximize performance and reusability.
+- 中间几张讨论编写异步代码时可以使用的关键工具和控制流工具，并描述构件库和应用程序的最佳实践，以最大限度地提高性能和可重用性。
 
-- The last section of the book covers the broader async ecosystem, and provides
-a number of examples of how to accomplish common tasks.
+- 本书的最后部分将介绍更广泛的异步生态系统，并提供一些常见需求的实现案例。
 
-With that out of the way, let's explore the exciting world of Asynchronous
-Programming in Rust!
+现在，让我们准备好一起探索激动人心的Rust异步编程世界吧！
+
+## 翻译
+
+本书是[《Asynchronous Programming in Rust》](https://rust-lang.github.io/async-book/index.html)的中文译本，使用和原著相同的开源协议发布。
+
+部分汉语内暂无公认翻译或存在争议的词汇，在翻译时将采取下表所示的策略：
+
+- Trait：翻译为特征。
+- Future：翻译为期物。Future有“期货”含义，在语境内通常指“异步任务”或“未来值”，以上三种翻译都是合理的；这里选择接近直译的”期货“，并采用”期物“以避免读者和金融领域中的”期货“混淆。”期物“也是欧长坤著[《现代C++教程》](https://changkun.de/modern-cpp/)中对`std::future`的翻译。
+- Crate：翻译为板条箱。Rust的Crate类似Python、Node等语言/框架的“包”，但是将Crate译为“包”在涉及其他语言的语境中容易和Package产生混淆。因此，这里选择直译为“板条箱”。
+
+译本采用以上翻译策略并不代表其为最优选项，“统一”“清晰”和“不易混淆”才是采用它们的目的和原因。上述翻译词汇在每一章中首次出现时，都会以`特征（trait）`的形式备注其原词。
+
+为了保护读者的阅读体验，译本的正文中不会出现其对应原本的提交哈希。贡献者在确认译本对应原本的版本时，可以参考译本仓库的`source`分支，译本保证和`source`分支中存储的原本完全同步，并在更新译本时同步更新`source`分支。
+
