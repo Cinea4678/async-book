@@ -10,7 +10,7 @@
   - [应用：构建一个执行器](02_execution/04_executor.md)
   - [执行器和系统IO](02_execution/05_io.md)
 - [`async`/`await`](03_async_await/01_chapter.md)
-- [Pinning](04_pinning/01_chapter.md)
+- [固定](04_pinning/01_chapter.md)
 - [Streams](05_streams/01_chapter.md)
   - [Iteration and Concurrency](05_streams/02_iteration_and_concurrency.md)
 - [Executing Multiple Futures at a Time](06_multiple_futures/01_chapter.md)

@@ -1,4 +1,4 @@
-# Pinning
+# 固定
 
 To poll futures, they must be pinned using a special type called
 `Pin<T>`. If you read the explanation of [the `Future` trait] in the
