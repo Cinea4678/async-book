@@ -9,12 +9,12 @@ use std::{
 
 // ANCHOR: stream_trait
 trait Stream {
-    /// The type of the value yielded by the stream.
+    /// 流所产生的值的类型
     type Item;
 
-    /// Attempt to resolve the next item in the stream.
-    /// Returns `Poll::Pending` if not ready, `Poll::Ready(Some(x))` if a value
-    /// is ready, and `Poll::Ready(None)` if the stream has completed.
+    /// 尝试解出流的下一个值
+    /// 如果值还没有准备好，返回 `Poll::Pending`；如果有值已经准备好，返回 `Poll::Ready(Some(x))`；
+    /// 如果流已经完成，返回 `Poll::Ready(None)`。
     fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>)
         -> Poll<Option<Self::Item>>;
 }
@@ -46,8 +46,7 @@ async fn send_recv() {
     tx.send(2).await.unwrap();
     drop(tx);
 
-    // `StreamExt::next` is similar to `Iterator::next`, but returns a
-    // type that implements `Future<Output = Option<T>>`.
+    // `StreamExt::next` 类似于 `Iterator::next`，但是会返回一个实现了 `Future<Output = Option<T>>` 的类型
     assert_eq!(Some(1), rx.next().await);
     assert_eq!(Some(2), rx.next().await);
     assert_eq!(None, rx.next().await);
