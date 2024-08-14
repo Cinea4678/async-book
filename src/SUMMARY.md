@@ -8,7 +8,7 @@
   - [`Future`特征](02_execution/02_future.md)
   - [通过`Waker`唤醒任务](02_execution/03_wakeups.md)
   - [应用：构建一个执行器](02_execution/04_executor.md)
-  - [Executors and System IO](02_execution/05_io.md)
+  - [执行器和系统IO](02_execution/05_io.md)
 - [`async`/`await`](03_async_await/01_chapter.md)
 - [Pinning](04_pinning/01_chapter.md)
 - [Streams](05_streams/01_chapter.md)
