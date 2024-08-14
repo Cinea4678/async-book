@@ -19,7 +19,7 @@ async fn get_book_and_music() -> (Book, Music) {
 mod other_langs {
 use super::*;
 // ANCHOR: other_langs
-// WRONG -- don't do this
+// 错误的 —— 不要这样做
 async fn get_book_and_music() -> (Book, Music) {
     let book_future = get_book();
     let music_future = get_music();
