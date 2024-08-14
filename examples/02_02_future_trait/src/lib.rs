@@ -37,15 +37,13 @@ impl SimpleFuture for SocketRead<'_> {
 
     fn poll(&mut self, wake: fn()) -> Poll<Self::Output> {
         if self.socket.has_data_to_read() {
-            // The socket has data -- read it into a buffer and return it.
+            // 套接字有数据——将它读取到一个缓冲区内，并返回。
             Poll::Ready(self.socket.read_buf())
         } else {
-            // The socket does not yet have data.
-            //
-            // Arrange for `wake` to be called once data is available.
-            // When data becomes available, `wake` will be called, and the
-            // user of this `Future` will know to call `poll` again and
-            // receive data.
+            // 套接字暂时还没有数据。
+            // 
+            // 安排`wake`在一旦有数据时被调用。当数据可用时，`wake`将被调用，
+            // 此时使用此期物的用户将知道再次调用`poll`并接收数据。
             self.socket.set_readable_callback(wake);
             Poll::Pending
         }
@@ -54,15 +52,13 @@ impl SimpleFuture for SocketRead<'_> {
 // ANCHOR_END: socket_read
 
 // ANCHOR: join
-/// A SimpleFuture that runs two other futures to completion concurrently.
+/// 一个 `SimpleFuture`，它可以并发地运行另外两个期物直到完成。
 ///
-/// Concurrency is achieved via the fact that calls to `poll` each future
-/// may be interleaved, allowing each future to advance itself at its own pace.
+/// 并发性是通过对每个期物的 `poll` 调用可以交替进行来实现的，这允许每个期物以自己
+/// 的节奏推进。
 pub struct Join<FutureA, FutureB> {
-    // Each field may contain a future that should be run to completion.
-    // If the future has already completed, the field is set to `None`.
-    // This prevents us from polling a future after it has completed, which
-    // would violate the contract of the `Future` trait.
+    // 每个字段可能包含一个需要运行至完成的期物。如果该期物已经完成，字段将被设置为
+    // `None`。这可以防止我们在期物完成后继续轮询它，这种轮询违反`Future`特征的约定。 
     a: Option<FutureA>,
     b: Option<FutureB>,
 }
@@ -74,14 +70,14 @@ where
 {
     type Output = ();
     fn poll(&mut self, wake: fn()) -> Poll<Self::Output> {
-        // Attempt to complete future `a`.
+        // 尝试将期物`a`推进至完成。
         if let Some(a) = &mut self.a {
             if let Poll::Ready(()) = a.poll(wake) {
                 self.a.take();
             }
         }
 
-        // Attempt to complete future `b`.
+        // 尝试将期物`b`推进至完成。
         if let Some(b) = &mut self.b {
             if let Poll::Ready(()) = b.poll(wake) {
                 self.b.take();
@@ -89,11 +85,11 @@ where
         }
 
         if self.a.is_none() && self.b.is_none() {
-            // Both futures have completed -- we can return successfully
+            // 两个期物都已经完成——我们可以成功返回了
             Poll::Ready(())
         } else {
-            // One or both futures returned `Poll::Pending` and still have
-            // work to do. They will call `wake()` when progress can be made.
+            // 一个或多个期物返回了`Poll::Pending`并仍然有工作没有完成。它们将在可以继续
+            // 推进时调用`wake()`函数。
             Poll::Pending
         }
     }
@@ -101,12 +97,10 @@ where
 // ANCHOR_END: join
 
 // ANCHOR: and_then
-/// A SimpleFuture that runs two futures to completion, one after another.
+/// 一个 `SimpleFuture`，它依次运行两个期物，直到它们全部完成。
 //
-// Note: for the purposes of this simple example, `AndThenFut` assumes both
-// the first and second futures are available at creation-time. The real
-// `AndThen` combinator allows creating the second future based on the output
-// of the first future, like `get_breakfast.and_then(|food| eat(food))`.
+// 注意：在这个简单的示例中，`AndThenFut` 假设第一个和第二个期物在其创建时都已经可用。而实际
+// 的 `AndThen` 组合器允许根据第一个期物的输出创建第二个期物，例如 `get_breakfast.and_then(|food| eat(food))`。
 pub struct AndThenFut<FutureA, FutureB> {
     first: Option<FutureA>,
     second: FutureB,
@@ -121,14 +115,13 @@ where
     fn poll(&mut self, wake: fn()) -> Poll<Self::Output> {
         if let Some(first) = &mut self.first {
             match first.poll(wake) {
-                // We've completed the first future -- remove it and start on
-                // the second!
+                // 我们已经完成第一个期物了——将它移除并开始第二个期物！
                 Poll::Ready(()) => self.first.take(),
-                // We couldn't yet complete the first future.
+                // 我们还没有完成第一个期物。
                 Poll::Pending => return Poll::Pending,
             };
         }
-        // Now that the first future is done, attempt to complete the second.
+        // 现在第一个期物已经完成了，尝试完成第二个。
         self.second.poll(wake)
     }
 }
@@ -145,9 +138,9 @@ use std::{
 trait Future {
     type Output;
     fn poll(
-        // Note the change from `&mut self` to `Pin<&mut Self>`:
+        // 注意 `&mut self` 变为了 `Pin<&mut Self>`:
         self: Pin<&mut Self>,
-        // and the change from `wake: fn()` to `cx: &mut Context<'_>`:
+        // 并且 `wake: fn()` 变为了 `cx: &mut Context<'_>`:
         cx: &mut Context<'_>,
     ) -> Poll<Self::Output>;
 }
