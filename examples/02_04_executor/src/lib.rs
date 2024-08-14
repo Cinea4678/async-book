@@ -28,7 +28,7 @@ struct Spawner {
     task_sender: SyncSender<Arc<Task>>,
 }
 
-/// 可以重新调度自身，以便由`Executor`轮询的期物。
+/// 可以重新把自己调度回队列，以便由`Executor`轮询的期物。
 struct Task {
     /// 正在执行中的期物，应当被推动到完成。
     /// 
@@ -38,7 +38,7 @@ struct Task {
     /// 可以使用 `UnsafeCell` 代替。
     future: Mutex<Option<BoxFuture<'static, ()>>>,
 
-    /// 将任务本身放回任务队列的句柄。
+    /// 将任务自己调度回任务队列的句柄。
     task_sender: SyncSender<Arc<Task>>,
 }
 
