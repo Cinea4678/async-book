@@ -9,6 +9,7 @@ AsyncRead
 AsyncWrite
 AwaitingFutOne
 AwaitingFutTwo
+Bjarne
 cancelling
 combinator
 combinators
@@ -54,6 +55,7 @@ MyType
 natively
 NotSend
 OtherType
+pansz
 performant
 PhantomPinned
 pointee
@@ -80,6 +82,7 @@ SomeType
 spawner
 StepOne
 StepTwo
+Stroustrup
 struct
 structs
 subfuture
