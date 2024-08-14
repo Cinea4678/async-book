@@ -13,7 +13,7 @@
 - [固定](04_pinning/01_chapter.md)
 - [流](05_streams/01_chapter.md)
   - [迭代和并发](05_streams/02_iteration_and_concurrency.md)
-- [Executing Multiple Futures at a Time](06_multiple_futures/01_chapter.md)
+- [同时执行多个期物](06_multiple_futures/01_chapter.md)
   - [`join!`](06_multiple_futures/02_join.md)
   - [`select!`](06_multiple_futures/03_select.md)
   - [Spawning](06_multiple_futures/04_spawning.md)

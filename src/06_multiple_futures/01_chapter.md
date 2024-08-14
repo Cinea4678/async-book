@@ -1,14 +1,11 @@
-# Executing Multiple Futures at a Time
+# 同时执行多个期物
 
-Up until now, we've mostly executed futures by using `.await`, which blocks
-the current task until a particular `Future` completes. However, real
-asynchronous applications often need to execute several different
-operations concurrently.
+到目前为止，我们大多使用 `.await` 来执行期物（future），这会阻塞当前任务，直到特定的期物完成。然而，真实的异步应用程序通常需要同时执行多个不同的操作。
 
-In this chapter, we'll cover some ways to execute multiple asynchronous
-operations at the same time:
+在本章中，我们将介绍一些同时执行多个异步操作的方法：
 
-- `join!`: waits for futures to all complete
-- `select!`: waits for one of several futures to complete
-- Spawning: creates a top-level task which ambiently runs a future to completion
-- `FuturesUnordered`: a group of futures which yields the result of each subfuture
+- `join!`：等待所有期物完成
+- `select!`：等待多个期物中的一个完成
+- 生成（Spawning）：创建一个顶层任务，该任务会在后台运行一个期物直到完成
+- `FuturesUnordered`：一个期物组，能够返回每个子期物的结果
+
