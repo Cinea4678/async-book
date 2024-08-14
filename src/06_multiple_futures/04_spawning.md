@@ -1,24 +1,17 @@
-# `Spawning`
+# `生成`
 
-Spawning allows you to run a new asynchronous task in the background. This allows us to continue executing other code 
-while it runs.
+生成（spawn）允许你在后台运行一个新的异步任务。这使我们能够在任务运行的同时继续执行其他代码。
 
-Say we have a web server that wants to accept connections without blocking the main thread. 
-To achieve this, we can use the `async_std::task::spawn` function to create and run a new task that handles the 
-connections. This function takes a future and returns a `JoinHandle`, which can be used to wait for the result of the 
-task once it's completed.
+假设我们有一个希望在不阻塞主线程的情况下接受连接的网络服务器。为此，我们可以使用 `async_std::task::spawn` 函数来创建并运行一个处理连接的新任务。该函数接收一个期物（future），并返回一个 `JoinHandle`，可以在任务完成后使用它来等待任务的结果。
 
 ```rust,edition2018
 {{#include ../../examples/06_04_spawning/src/lib.rs:example}}
 ```
 
-The `JoinHandle` returned by `spawn` implements the `Future` trait, so we can `.await` it to get the result of the task.
-This will block the current task until the spawned task completes. If the task is not awaited, your program will 
-continue executing without waiting for the task, cancelling it if the function is completed before the task is finished.
+`spawn`函数返回的`JoinHandle`实现了`Future`特征（trait），所以我们可以通过`.await`来获取任务的结果。这将阻塞当前任务，直到被生成的任务完成。如果不对任务进行`.await`，程序将继续执行而不等待该任务，并在函数完成时将它取消。
 
 ```rust,edition2018
 {{#include ../../examples/06_04_spawning/src/lib.rs:join_all}}
 ```
 
-To communicate between the main task and the spawned task, we can use channels
-provided by the async runtime used.
+为了在主任务和生成的任务之间进行通信，我们可以使用异步运行时提供的通道。
