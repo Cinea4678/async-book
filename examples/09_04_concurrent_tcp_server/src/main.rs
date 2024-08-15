@@ -8,7 +8,7 @@ async fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").await.unwrap();
     listener
         .incoming()
-        .for_each_concurrent(/* limit */ None, |tcpstream| async move {
+        .for_each_concurrent(/* 限制 */ None, |tcpstream| async move {
             let tcpstream = tcpstream.unwrap();
             handle_connection(tcpstream).await;
         })
@@ -24,7 +24,7 @@ async fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 1024];
     stream.read(&mut buffer).await.unwrap();
 
-    //<-- snip -->
+    //<-- 略 -->
     stream.write(response.as_bytes()).await.unwrap();
     stream.flush().await.unwrap();
 }

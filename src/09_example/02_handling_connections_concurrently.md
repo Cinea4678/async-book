@@ -1,28 +1,22 @@
-# Handling Connections Concurrently
-The problem with our code so far is that `listener.incoming()` is a blocking iterator.
-The executor can't run other futures while `listener` waits on incoming connections,
-and we can't handle a new connection until we're done with the previous one.
+# 并发处理连接
 
-In order to fix this, we'll transform `listener.incoming()` from a blocking Iterator
-to a non-blocking Stream. Streams are similar to Iterators, but can be consumed asynchronously.
-For more information, see the [chapter on Streams](../05_streams/01_chapter.md).
+目前代码的问题在于 `listener.incoming()` 是一个阻塞的迭代器。在 `listener` 等待传入连接时，执行器不能运行其他期物（future），并且在处理完上一个连接之前，我们无法处理新的连接。
 
-Let's replace our blocking `std::net::TcpListener` with the non-blocking `async_std::net::TcpListener`,
-and update our connection handler to accept an `async_std::net::TcpStream`:
+为了解决这个问题，我们将把 `listener.incoming()` 从一个阻塞的迭代器转换为一个非阻塞的流（Stream）。流与迭代器类似，但可以被异步消费。有关更多信息，请参阅[关于流的章节](../05_streams/01_chapter.md)。
+
+接下来，我们将用非阻塞的 `async_std::net::TcpListener` 替换当前阻塞的 `std::net::TcpListener`，
+并更新我们的连接处理器以接受 `async_std::net::TcpStream`：
+
 ```rust,ignore
 {{#include ../../examples/09_04_concurrent_tcp_server/src/main.rs:handle_connection}}
 ```
 
-The asynchronous version of `TcpListener` implements the `Stream` trait for `listener.incoming()`,
-a change which provides two benefits.
-The first is that `listener.incoming()` no longer blocks the executor.
-The executor can now yield to other pending futures 
-while there are no incoming TCP connections to be processed.
+`TcpListener`的异步版本为`listener.incoming()`实现了`Stream`特征，这一改变带来了两个好处：
 
-The second benefit is that elements from the Stream can optionally be processed concurrently,
-using a Stream's `for_each_concurrent` method.
-Here, we'll take advantage of this method to handle each incoming request concurrently.
-We'll need to import the `Stream` trait from the `futures` crate, so our Cargo.toml now looks like this:
+首先，`listener.incoming()`不再阻塞执行器。当没有需要处理的传入TCP连接时，执行器现在可以让出时间片给其他待处理的期物。
+
+其次，流中的元素可以使用Stream的`for_each_concurrent`方法来并发处理。在这里，我们将利用这个方法来并发处理每个传入的请求。我们需要从`futures`板条箱（crate）中导入`Stream`特征，因此现在我们的Cargo.toml看起来如下：
+
 ```diff
 +[dependencies]
 +futures = "0.3"
@@ -32,23 +26,18 @@ We'll need to import the `Stream` trait from the `futures` crate, so our Cargo.t
  features = ["attributes"]
 ```
 
-Now, we can handle each connection concurrently by passing `handle_connection` in through a closure function.
-The closure function takes ownership of each `TcpStream`, and is run as soon as a new `TcpStream` becomes available.
-As long as `handle_connection` does not block, a slow request will no longer prevent other requests from completing.
+现在，我们可以通过闭包函数来并发地处理每个连接。这个闭包函数会取得每个`TcpStream`的所有权，并在新的`TcpStream`可用时立即运行。只要`handle_connection`不阻塞，一个慢请求就不会再阻止其他请求的完成。
+
 ```rust,ignore
 {{#include ../../examples/09_04_concurrent_tcp_server/src/main.rs:main_func}}
 ```
-# Serving Requests in Parallel
-Our example so far has largely presented concurrency (using async code)
-as an alternative to parallelism (using threads).
-However, async code and threads are not mutually exclusive.
-In our example, `for_each_concurrent` processes each connection concurrently, but on the same thread.
-The `async-std` crate allows us to spawn tasks onto separate threads as well.
-Because `handle_connection` is both `Send` and non-blocking, it's safe to use with `async_std::task::spawn`.
-Here's what that would look like:
+# 并行处理请求
+
+到目前为止，我们的例子主要将并发（使用异步代码）作为并行（使用线程）的替代方案来呈现。然而，异步代码和线程并不是互相排斥的。在我们的例子中，`for_each_concurrent` 并发、但在同一线程上地处理每个连接。除此以外，`async-std` 板条箱也允许我们将任务生成到独立的线程上。
+
+由于 `handle_connection` 既具有 `Send` 特征，又是非阻塞的，因此可以安全地与 `async_std::task::spawn` 一起使用。以下是其示例代码：
+
 ```rust
 {{#include ../../examples/09_05_final_tcp_server/src/main.rs:main_func}}
 ```
-Now we are using both concurrency and parallelism to handle multiple requests at the same time!
-See the [section on multithreaded executors](../08_ecosystem/00_chapter.md#single-threading-vs-multithreading)
-for more information.
+现在，我们同时使用了并发和并行来处理多个请求！请参阅[多线程执行器部分](../08_ecosystem/00_chapter.md#single-threading-vs-multithreading)来获取更多信息。
