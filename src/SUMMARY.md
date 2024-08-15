@@ -23,7 +23,7 @@
   - [`async` 块中的 `?`](07_workarounds/02_err_in_async_blocks.md)
   - [`Send` 近似](07_workarounds/03_send_approximation.md)
   - [递归](07_workarounds/04_recursion.md)
-  - [`async` in Traits](07_workarounds/05_async_in_traits.md)
+  - [特征中的`async`](07_workarounds/05_async_in_traits.md)
 - [The Async Ecosystem](08_ecosystem/00_chapter.md)
 - [Final Project: HTTP Server](09_example/00_intro.md)
   - [Running Asynchronous Code](09_example/01_running_async_code.md)
