@@ -22,7 +22,7 @@
 - [必知必会的变通方法](07_workarounds/01_chapter.md)
   - [`async` 块中的 `?`](07_workarounds/02_err_in_async_blocks.md)
   - [`Send` 近似](07_workarounds/03_send_approximation.md)
-  - [Recursion](07_workarounds/04_recursion.md)
+  - [递归](07_workarounds/04_recursion.md)
   - [`async` in Traits](07_workarounds/05_async_in_traits.md)
 - [The Async Ecosystem](08_ecosystem/00_chapter.md)
 - [Final Project: HTTP Server](09_example/00_intro.md)
