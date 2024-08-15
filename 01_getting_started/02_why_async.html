@@ -1,0 +1,278 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>为何异步？ - Rust异步编程</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../01_getting_started/01_chapter.html"><strong aria-hidden="true">1.</strong> 入门</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../01_getting_started/02_why_async.html" class="active"><strong aria-hidden="true">1.1.</strong> 为何异步？</a></li><li class="chapter-item expanded "><a href="../01_getting_started/03_state_of_async_rust.html"><strong aria-hidden="true">1.2.</strong> 异步Rust的现状</a></li><li class="chapter-item expanded "><a href="../01_getting_started/04_async_await_primer.html"><strong aria-hidden="true">1.3.</strong> async/.await入门</a></li></ol></li><li class="chapter-item expanded "><a href="../02_execution/01_chapter.html"><strong aria-hidden="true">2.</strong> 幕后揭秘：执行Future和任务</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../02_execution/02_future.html"><strong aria-hidden="true">2.1.</strong> Future特征</a></li><li class="chapter-item expanded "><a href="../02_execution/03_wakeups.html"><strong aria-hidden="true">2.2.</strong> 通过Waker唤醒任务</a></li><li class="chapter-item expanded "><a href="../02_execution/04_executor.html"><strong aria-hidden="true">2.3.</strong> 应用：构建一个执行器</a></li><li class="chapter-item expanded "><a href="../02_execution/05_io.html"><strong aria-hidden="true">2.4.</strong> 执行器和系统IO</a></li></ol></li><li class="chapter-item expanded "><a href="../03_async_await/01_chapter.html"><strong aria-hidden="true">3.</strong> async/await</a></li><li class="chapter-item expanded "><a href="../04_pinning/01_chapter.html"><strong aria-hidden="true">4.</strong> 固定</a></li><li class="chapter-item expanded "><a href="../05_streams/01_chapter.html"><strong aria-hidden="true">5.</strong> 流</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../05_streams/02_iteration_and_concurrency.html"><strong aria-hidden="true">5.1.</strong> 迭代和并发</a></li></ol></li><li class="chapter-item expanded "><a href="../06_multiple_futures/01_chapter.html"><strong aria-hidden="true">6.</strong> 同时执行多个期物</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../06_multiple_futures/02_join.html"><strong aria-hidden="true">6.1.</strong> join!</a></li><li class="chapter-item expanded "><a href="../06_multiple_futures/03_select.html"><strong aria-hidden="true">6.2.</strong> select!</a></li><li class="chapter-item expanded "><a href="../06_multiple_futures/04_spawning.html"><strong aria-hidden="true">6.3.</strong> 生成</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.4.</strong> 原文TODO: 取消和超时</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.5.</strong> 原文TODO: FuturesUnordered</div></li></ol></li><li class="chapter-item expanded "><a href="../07_workarounds/01_chapter.html"><strong aria-hidden="true">7.</strong> 必知必会的变通方法</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../07_workarounds/02_err_in_async_blocks.html"><strong aria-hidden="true">7.1.</strong> async 块中的 ?</a></li><li class="chapter-item expanded "><a href="../07_workarounds/03_send_approximation.html"><strong aria-hidden="true">7.2.</strong> Send 近似</a></li><li class="chapter-item expanded "><a href="../07_workarounds/04_recursion.html"><strong aria-hidden="true">7.3.</strong> 递归</a></li><li class="chapter-item expanded "><a href="../07_workarounds/05_async_in_traits.html"><strong aria-hidden="true">7.4.</strong> 特征中的async</a></li></ol></li><li class="chapter-item expanded "><a href="../08_ecosystem/00_chapter.html"><strong aria-hidden="true">8.</strong> 异步生态系统</a></li><li class="chapter-item expanded "><a href="../09_example/00_intro.html"><strong aria-hidden="true">9.</strong> 最终项目: HTTP服务器</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../09_example/01_running_async_code.html"><strong aria-hidden="true">9.1.</strong> 运行异步代码</a></li><li class="chapter-item expanded "><a href="../09_example/02_handling_connections_concurrently.html"><strong aria-hidden="true">9.2.</strong> 并发处理连接</a></li><li class="chapter-item expanded "><a href="../09_example/03_tests.html"><strong aria-hidden="true">9.3.</strong> 测试服务器</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">10.</strong> 原文TODO: I/O</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">10.1.</strong> 原文TODO: AsyncRead and AsyncWrite</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.</strong> 原文TODO: Asynchronous Design Patterns: Solutions and Suggestions</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">11.1.</strong> 原文TODO: Modeling Servers and the Request/Response Pattern</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.2.</strong> 原文TODO: Managing Shared State</div></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust异步编程</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/cinea4678/async-book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="为何异步"><a class="header" href="#为何异步">为何异步？</a></h1>
+<p>我们都喜欢Rust让我们能够编写快速、安全的软件。但异步编程如何融入这个愿景呢？</p>
+<p>异步编程，简称异步（async），是一种 <em>并发编程模型</em> ，越来越多的语言都支持这种模型。通过<code>async/await</code>语法，异步编程让你能够在少量的操作系统线程上运行大量的并发任务，同时保留普通同步编程的大部分外观和感觉。</p>
+<h2 id="异步对比其他并发编程模型"><a class="header" href="#异步对比其他并发编程模型">异步对比其他并发编程模型</a></h2>
+<p>并发编程相比于常规的顺序编程要不成熟得多，也没有那么“标准化”。因此，我们根据编程语言支持哪些并发编程模型来以不同的方式表达并发性。对最流行并发模型的简单了解，可以帮助你理解异步编程是如何融入更广泛的并发编程领域的：</p>
+<ul>
+<li><strong>操作系统线程</strong>不需要对编程模型进行任何更改，这使得表达并发非常简单。然而，在线程之间进行同步可能会非常困难，并且其性能开销也比较大。线程池可以缓解其中的一些成本，但不足以支持大规模的IO密集型工作负载。</li>
+<li><strong>事件驱动编程</strong>结合 <em>回调函数</em> 可以非常高效，但往往会导致冗长且“非线性”的控制流。数据流和错误传播通常难以跟踪。</li>
+<li><strong>协程</strong>和线程一样，不需要更改编程模型，因此使用起来非常方便。它们和异步一样，也可以支持大量任务。然而，协程抽象掉了一些对于系统编程和自定义运行时实现者来说非常重要的底层细节。</li>
+<li><strong>Actor模型</strong>将所有并发计算划分为称为actor的单元，这些单元通过可能出错的消息传递进行通信，就像在分布式系统中一样。Actor模型可以被实现得很高效，但它留下了许多未解决的实际问题，例如流量控制和重试逻辑。</li>
+</ul>
+<p>总而言之，异步编程能够带来高性能的实现，适合用于像Rust这样的低级语言，同时提供了大部分线程和协程的便利性。</p>
+<h2 id="rust异步对比其他语言"><a class="header" href="#rust异步对比其他语言">Rust异步对比其他语言</a></h2>
+<p>尽管许多编程语言都支持异步编程，但在具体实现上各有不同。Rust 的异步编程实现与大多数语言在几个方面有所不同：</p>
+<ul>
+<li>在Rust中，<strong>期物（Future）是惰性的</strong>，它们只有在被轮询时才会前进。一旦放弃（丢弃）一个期物，它将停止进一步的执行。</li>
+<li>在Rust中，<strong>异步是零成本的</strong>，这意味着你只需为你真正使用的部分付出代价。具体来说，你可以在不进行堆分配和动态派发的情况下使用异步，这对于性能来说非常有利！这也使得你可以在受限的环境中使用异步，比如嵌入式系统。</li>
+<li>在Rust中，<strong>没有提供内置的运行时</strong>。相反，运行时由社区维护的板条箱（crate）提供。</li>
+<li>在Rust中，<strong>既有单线程运行时也有多线程运行时</strong>，它们各自拥有不同的优点和缺点。</li>
+</ul>
+<h2 id="rust中的异步对比线程"><a class="header" href="#rust中的异步对比线程">Rust中的异步对比线程</a></h2>
+<p>Rust中异步编程的主要替代方案是使用操作系统线程，无论是通过<code>std::thread</code>直接操作，还是通过线程池间接实现。从线程迁移到异步编程，或者反过来，通常都需要进行大量的重构工作，无论是在实现层面还是在公共接口（如果你正在构建一个库）上。因此，尽早选择适合你需求的模型可以节省大量的开发时间。</p>
+<p><strong>操作系统线程</strong>适合处理少量任务，因为线程会带来CPU和内存的开销。创建和切换线程的成本相对较高，即使是空闲线程也会消耗系统资源。使用线程池库有助于减少部分开销，但不能完全将其消除。然而，使用线程可以复用现有的同步代码，而无需进行显著的代码更改——其并不需要特定的编程模型。在某些操作系统中，你还可以更改线程的优先级，这对于驱动程序和其他对延迟敏感的应用程序非常有用。</p>
+<p><strong>异步编程</strong>显著减少了CPU和内存的开销，尤其适用于包含大量IO密集型任务的工作负载，例如服务器和数据库。在其他条件相同的情况下，相比操作系统线程，使用异步可以支持更高数量级的任务，因为异步运行时利用少量的（昂贵的）线程来处理大量的（廉价的）任务。然而，异步Rust会导致生成较大的二进制文件，这是因为异步函数生成的状态机，以及每个可执行文件都包含了一个异步运行时。</p>
+<p>最后需要强调的一点是，异步编程并不比线程更好，两者是完全不同的。如果你不需要异步来提升性能，线程往往是更简单的替代方案。</p>
+<h3 id="示例并发的下载"><a class="header" href="#示例并发的下载">示例：并发的下载</a></h3>
+<p>在这个例子中，我们的目标是并发地下载两个网页。在一个典型的多线程应用程序中，我们需要生成线程来实现并发：</p>
+<pre><code class="language-rust ignore">fn get_two_sites() {
+    // 生成两个线程来执行任务
+    let thread_one = thread::spawn(|| download("https://www.foo.com"));
+    let thread_two = thread::spawn(|| download("https://www.bar.com"));
+
+    // 等待两个线程都结束
+    thread_one.join().expect("thread one panicked");
+    thread_two.join().expect("thread two panicked");
+}</code></pre>
+<p>然而，下载网页只是一个小任务；为这样一项小量的工作创建一个线程是相当浪费的。对于一个更大的应用程序，它很容易成为瓶颈。在异步Rust中，我们可以在不增加额外线程的情况下并发运行这些任务：</p>
+<pre><code class="language-rust ignore">async fn get_two_sites_async() {
+    // 创建两个不同的“期物”，这些期物在完成时将异步地下载网页。
+    let future_one = download_async("https://www.foo.com");
+    let future_two = download_async("https://www.bar.com");
+
+    // 将两个期物同时运行到完成状态
+    join!(future_one, future_two);
+}</code></pre>
+<p>在这里，没有额外的线程被创建。此外，所有的函数调用都是静态分发的，并且没有堆分配！然而，我们首先需要编写异步代码，而本书将帮助你实现这一目标。</p>
+<h2 id="rust的自定义并发模型"><a class="header" href="#rust的自定义并发模型">Rust的自定义并发模型</a></h2>
+<p>最后需要注意的是，Rust 并不会强制你在线程和异步之间做出选择。你可以在同一个应用程序中同时使用这两种模型，这在你有混合线程和异步依赖时可能会非常有用。实际上，你甚至可以使用完全不同的并发模型，只要你能找到实现了该模型的库，例如事件驱动编程。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../01_getting_started/01_chapter.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../01_getting_started/03_state_of_async_rust.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../01_getting_started/01_chapter.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../01_getting_started/03_state_of_async_rust.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

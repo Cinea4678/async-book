@@ -1,0 +1,353 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>应用：构建一个执行器 - Rust异步编程</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../01_getting_started/01_chapter.html"><strong aria-hidden="true">1.</strong> 入门</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../01_getting_started/02_why_async.html"><strong aria-hidden="true">1.1.</strong> 为何异步？</a></li><li class="chapter-item expanded "><a href="../01_getting_started/03_state_of_async_rust.html"><strong aria-hidden="true">1.2.</strong> 异步Rust的现状</a></li><li class="chapter-item expanded "><a href="../01_getting_started/04_async_await_primer.html"><strong aria-hidden="true">1.3.</strong> async/.await入门</a></li></ol></li><li class="chapter-item expanded "><a href="../02_execution/01_chapter.html"><strong aria-hidden="true">2.</strong> 幕后揭秘：执行Future和任务</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../02_execution/02_future.html"><strong aria-hidden="true">2.1.</strong> Future特征</a></li><li class="chapter-item expanded "><a href="../02_execution/03_wakeups.html"><strong aria-hidden="true">2.2.</strong> 通过Waker唤醒任务</a></li><li class="chapter-item expanded "><a href="../02_execution/04_executor.html" class="active"><strong aria-hidden="true">2.3.</strong> 应用：构建一个执行器</a></li><li class="chapter-item expanded "><a href="../02_execution/05_io.html"><strong aria-hidden="true">2.4.</strong> 执行器和系统IO</a></li></ol></li><li class="chapter-item expanded "><a href="../03_async_await/01_chapter.html"><strong aria-hidden="true">3.</strong> async/await</a></li><li class="chapter-item expanded "><a href="../04_pinning/01_chapter.html"><strong aria-hidden="true">4.</strong> 固定</a></li><li class="chapter-item expanded "><a href="../05_streams/01_chapter.html"><strong aria-hidden="true">5.</strong> 流</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../05_streams/02_iteration_and_concurrency.html"><strong aria-hidden="true">5.1.</strong> 迭代和并发</a></li></ol></li><li class="chapter-item expanded "><a href="../06_multiple_futures/01_chapter.html"><strong aria-hidden="true">6.</strong> 同时执行多个期物</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../06_multiple_futures/02_join.html"><strong aria-hidden="true">6.1.</strong> join!</a></li><li class="chapter-item expanded "><a href="../06_multiple_futures/03_select.html"><strong aria-hidden="true">6.2.</strong> select!</a></li><li class="chapter-item expanded "><a href="../06_multiple_futures/04_spawning.html"><strong aria-hidden="true">6.3.</strong> 生成</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.4.</strong> 原文TODO: 取消和超时</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.5.</strong> 原文TODO: FuturesUnordered</div></li></ol></li><li class="chapter-item expanded "><a href="../07_workarounds/01_chapter.html"><strong aria-hidden="true">7.</strong> 必知必会的变通方法</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../07_workarounds/02_err_in_async_blocks.html"><strong aria-hidden="true">7.1.</strong> async 块中的 ?</a></li><li class="chapter-item expanded "><a href="../07_workarounds/03_send_approximation.html"><strong aria-hidden="true">7.2.</strong> Send 近似</a></li><li class="chapter-item expanded "><a href="../07_workarounds/04_recursion.html"><strong aria-hidden="true">7.3.</strong> 递归</a></li><li class="chapter-item expanded "><a href="../07_workarounds/05_async_in_traits.html"><strong aria-hidden="true">7.4.</strong> 特征中的async</a></li></ol></li><li class="chapter-item expanded "><a href="../08_ecosystem/00_chapter.html"><strong aria-hidden="true">8.</strong> 异步生态系统</a></li><li class="chapter-item expanded "><a href="../09_example/00_intro.html"><strong aria-hidden="true">9.</strong> 最终项目: HTTP服务器</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../09_example/01_running_async_code.html"><strong aria-hidden="true">9.1.</strong> 运行异步代码</a></li><li class="chapter-item expanded "><a href="../09_example/02_handling_connections_concurrently.html"><strong aria-hidden="true">9.2.</strong> 并发处理连接</a></li><li class="chapter-item expanded "><a href="../09_example/03_tests.html"><strong aria-hidden="true">9.3.</strong> 测试服务器</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">10.</strong> 原文TODO: I/O</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">10.1.</strong> 原文TODO: AsyncRead and AsyncWrite</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.</strong> 原文TODO: Asynchronous Design Patterns: Solutions and Suggestions</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">11.1.</strong> 原文TODO: Modeling Servers and the Request/Response Pattern</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.2.</strong> 原文TODO: Managing Shared State</div></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust异步编程</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/cinea4678/async-book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="应用构建一个执行器"><a class="header" href="#应用构建一个执行器">应用：构建一个执行器</a></h1>
+<p>Rust的期物（future）是惰性的：除非被主动驱动完成，否则它们不会执行任何操作。将期物在<code>async</code>函数内部<code>.await</code>是驱动期物完成的一种方法，但这只是将问题推到更高一级：谁来运行由顶层的<code>async</code>函数返回的期物呢？答案是我们需要一个期物执行器。</p>
+<p>期物执行器会接收一组顶层的期物，并通过在期物可以取得进展时调用<code>poll</code>来将它们运行至完成。通常，执行器会先对期物进行一次<code>poll</code>以开始期物的执行。当期物通过调用<code>wake()</code>表示它们已准备好取得进展时，它们会被重新放回队列中，并再次调用<code>poll</code>。这一过程会重复，直到期物完成。</p>
+<p>在本节中，我们将编写一个简单的执行器，它能够并发地运行大量顶层的期物，直到完成。</p>
+<p>在这个示例中，我们依赖于<code>futures</code>板条箱中的<code>ArcWake</code>特征，它提供了一种简便的方法来构建<code>Waker</code>。请编辑<code>Cargo.toml</code>文件以添加一个新的依赖项：</p>
+<pre><code class="language-toml">[package]
+name = "timer_future"
+version = "0.1.0"
+authors = ["XYZ Author"]
+edition = "2021"
+
+[dependencies]
+futures = "0.3"
+</code></pre>
+<p>接下来，我们需要在 <code>src/main.rs</code> 的顶部添加以下导入内容：</p>
+<pre><code class="language-rust ignore">use futures::{
+    future::{BoxFuture, FutureExt},
+    task::{waker_ref, ArcWake},
+};
+use std::{
+    future::Future,
+    sync::mpsc::{sync_channel, Receiver, SyncSender},
+    sync::{Arc, Mutex},
+    task::Context,
+    time::Duration,
+};
+// 我们在上一节里写的计时器
+use timer_future::TimerFuture;</code></pre>
+<p>我们的执行器通过把任务发送到一个通道上来工作。执行器将从通道中取出事件并运行它们。当一个任务准备好继续工作（被唤醒）时，它可以通过将自己重新放回通道来让自己再次被轮询。</p>
+<p>在这个设计中，执行器本身只需要任务通道的接收端。用户将获得发送端，以便他们可以生成新的期物。任务本身就是可以让自己被调度回队列的期物，因此我们将任务们存储为“一个期物和一个发送端”的二元配对，任务可以使用其持有的发送端来让自己重新回到队列。</p>
+<pre><code class="language-rust ignore">/// 从通道接收任务并执行之的任务执行器。
+struct Executor {
+    ready_queue: Receiver&lt;Arc&lt;Task&gt;&gt;,
+}
+
+/// `Spawner` 会将新的期物生成到任务通道中。
+#[derive(Clone)]
+struct Spawner {
+    task_sender: SyncSender&lt;Arc&lt;Task&gt;&gt;,
+}
+
+/// 可以重新把自己调度回队列，以便由`Executor`轮询的期物。
+struct Task {
+    /// 正在执行中的期物，应当被推动到完成。
+    /// 
+    /// 使用 `Mutex` 与否并不影响正确性，因为我们一次只在一个线程上执行任务。
+    /// 然而，Rust 并不足够智能，无法知道 `future` 仅在一个线程中被修改，
+    /// 所以我们需要使用 `Mutex` 来证明线程安全性。在生产环境中的执行器不需要这样做，
+    /// 可以使用 `UnsafeCell` 代替。
+    future: Mutex&lt;Option&lt;BoxFuture&lt;'static, ()&gt;&gt;&gt;,
+
+    /// 将任务自己调度回任务队列的句柄。
+    task_sender: SyncSender&lt;Arc&lt;Task&gt;&gt;,
+}
+
+fn new_executor_and_spawner() -&gt; (Executor, Spawner) {
+    // 最大允许在通道中排队的任务数。这只是为了让 `sync_channel` 满意，
+    // 并不会出现在实际的执行器中。
+    const MAX_QUEUED_TASKS: usize = 10_000;
+    let (task_sender, ready_queue) = sync_channel(MAX_QUEUED_TASKS);
+    (Executor { ready_queue }, Spawner { task_sender })
+}</code></pre>
+<p>让我们也为 <code>spawner</code> 添加一个方法，以使得生成新的期物变简单。此方法将接收一个期物类型，将其装箱，并创建一个包含它的新 <code>Arc&lt;Task&gt;</code>，这样它就可以被放入执行器的队列中：</p>
+<pre><code class="language-rust ignore">impl Spawner {
+    fn spawn(&amp;self, future: impl Future&lt;Output = ()&gt; + 'static + Send) {
+        let future = future.boxed();
+        let task = Arc::new(Task {
+            future: Mutex::new(Some(future)),
+            task_sender: self.task_sender.clone(),
+        });
+        self.task_sender.send(task).expect("too many tasks queued");
+    }
+}</code></pre>
+<p>要轮询期物，我们需要创建一个<code>Waker</code>。如在<a href="./03_wakeups.html">任务唤醒部分</a>中讨论的那样，<code>Waker</code>负责在<code>wake</code>被调用后调度任务，使其再次被轮询。请记住，<code>Waker</code>会告诉执行器究竟是哪一个任务已准备就绪，从而允许执行器仅轮询那些准备好推进的期物。创建一个新的<code>Waker</code>最简单的方法是实现<code>ArcWake</code>特征，然后使用<code>waker_ref</code>或<code>.into_waker()</code>函数将一个<code>Arc&lt;impl ArcWake&gt;</code>转换为<code>Waker</code>。让我们为我们的任务实现<code>ArcWake</code>，以便它们可以被转换为<code>Waker</code>并被唤醒：</p>
+<pre><code class="language-rust ignore">impl ArcWake for Task {
+    fn wake_by_ref(arc_self: &amp;Arc&lt;Self&gt;) {
+        // 实现 `wake`，将此任务重新发送到任务通道，以便执行器可以再次对其进行轮询。
+        let cloned = arc_self.clone();
+        arc_self
+            .task_sender
+            .send(cloned)
+            .expect("too many tasks queued");
+    }
+}</code></pre>
+<p>当从<code>Arc&lt;Task&gt;</code>创建一个<code>Waker</code>时，调用<code>wake()</code>会导致一个<code>Arc</code>的副本被发送到任务通道上。然后，我们的执行器需要拾取该任务并对其进行轮询。让我们来实现这一点：</p>
+<pre><code class="language-rust ignore">impl Executor {
+    fn run(&amp;self) {
+        while let Ok(task) = self.ready_queue.recv() {
+            // 将期物取出，并且如果它尚未完成（仍然是Some），则对其进行轮询以尝试完成它。
+            let mut future_slot = task.future.lock().unwrap();
+            if let Some(mut future) = future_slot.take() {
+                // 从任务自身创建一个`LocalWaker`
+                let waker = waker_ref(&amp;task);
+                let context = &amp;mut Context::from_waker(&amp;waker);
+                // `BoxFuture&lt;T&gt;` 是 `Pin&lt;Box&lt;dyn Future&lt;Output = T&gt; + Send + 'static&gt;&gt;` 的类型别名。
+                // 我们可以通过调用 `Pin::as_mut` 方法从中获取 `Pin&lt;&amp;mut dyn Future + Send + 'static&gt;`。
+                if future.as_mut().poll(context).is_pending() {
+                    // 我们还没有处理完这个期物，所以将它放回任务中，以便将来再次运行。
+                    *future_slot = Some(future);
+                }
+            }
+        }
+    }
+}</code></pre>
+<p>恭喜！我们现在有了一个可用的期物执行器。我们甚至可以使用它来运行 <code>async/.await</code> 代码和自定义期物，例如我们之前编写的 <code>TimerFuture</code>。</p>
+<pre><code class="language-rust edition2018 ignore">fn main() {
+    let (executor, spawner) = new_executor_and_spawner();
+
+    // 生成一个任务以在等待定时器之前和之后打印内容。
+    spawner.spawn(async {
+        println!("howdy!");
+        // 等待我们的计时器期物在两秒后完成
+        TimerFuture::new(Duration::new(2, 0)).await;
+        println!("done!");
+    });
+
+    // 将生成器丢弃，这样我们的执行器就知道它已经完成，不会再接收到需要运行的新任务。
+    drop(spawner);
+
+    // 运行执行器直到任务队列为空。  
+    // 这将先打印“howdy!”，暂停片刻，然后打印“done!”。
+    executor.run();
+}</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../02_execution/03_wakeups.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../02_execution/05_io.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../02_execution/03_wakeups.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../02_execution/05_io.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
