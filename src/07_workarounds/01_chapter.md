@@ -1,6 +1,3 @@
-# Workarounds to Know and Love
+# 必知必会的变通方法
 
-Rust's `async` support is still fairly new, and there are a handful of
-highly-requested features still under active development, as well
-as some subpar diagnostics. This chapter will discuss some common pain
-points and explain how to work around them.
+Rust 的 `async` 支持仍然相对较新，目前还有一些备受期待的功能正在积极开发中，同时也存在一些诊断信息效果不佳的情况。本章将讨论一些常见的痛点，并解释如何解决这些问题。

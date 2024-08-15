@@ -19,7 +19,7 @@
   - [生成](06_multiple_futures/04_spawning.md)
   - [原文TODO: 取消和超时]()
   - [原文TODO: `FuturesUnordered`]()
-- [Workarounds to Know and Love](07_workarounds/01_chapter.md)
+- [必知必会的变通方法](07_workarounds/01_chapter.md)
   - [`?` in `async` Blocks](07_workarounds/02_err_in_async_blocks.md)
   - [`Send` Approximation](07_workarounds/03_send_approximation.md)
   - [Recursion](07_workarounds/04_recursion.md)
