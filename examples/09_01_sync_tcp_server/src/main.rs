@@ -4,10 +4,10 @@ use std::net::TcpListener;
 use std::net::TcpStream;
 
 fn main() {
-    // Listen for incoming TCP connections on localhost port 7878
+    // 监听本地端口 7878 上传入的TCP连接
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
 
-    // Block forever, handling each request that arrives at this IP address
+    // 一直阻塞在这里，处理传入这个IP地址的每个请求
     for stream in listener.incoming() {
         let stream = stream.unwrap();
 
@@ -16,14 +16,13 @@ fn main() {
 }
 
 fn handle_connection(mut stream: TcpStream) {
-    // Read the first 1024 bytes of data from the stream
+    // 从流中读取前 1024 个字节
     let mut buffer = [0; 1024];
     stream.read(&mut buffer).unwrap();
 
     let get = b"GET / HTTP/1.1\r\n";
 
-    // Respond with greetings or a 404,
-    // depending on the data in the request
+    // 根据请求中的数据，用问候或 404 响应
     let (status_line, filename) = if buffer.starts_with(get) {
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
     } else {
@@ -31,8 +30,7 @@ fn handle_connection(mut stream: TcpStream) {
     };
     let contents = fs::read_to_string(filename).unwrap();
 
-    // Write response back to the stream,
-    // and flush the stream to ensure the response is sent back to the client
+    // 将响应写回到流中并刷新，以确保响应被发送回客户端
     let response = format!("{status_line}{contents}");
     stream.write_all(response.as_bytes()).unwrap();
     stream.flush().unwrap();
