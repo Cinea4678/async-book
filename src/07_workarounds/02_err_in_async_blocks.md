@@ -1,11 +1,8 @@
-# `?` in `async` Blocks
+# `async` 块中的 `?`
 
-Just as in `async fn`, it's common to use `?` inside `async` blocks.
-However, the return type of `async` blocks isn't explicitly stated.
-This can cause the compiler to fail to infer the error type of the
-`async` block.
+就像在 `async fn` 中一样，在 `async` 块中使用 `?` 是很常见的。然而，`async` 块的返回类型一般不会被显式声明，这可能导致编译器无法推断出 `async` 块的错误类型。
 
-For example, this code:
+例如，以下代码：
 
 ```rust,edition2018
 # struct MyError;
@@ -18,7 +15,7 @@ let fut = async {
 };
 ```
 
-will trigger this error:
+会触发这个错误：
 
 ```
 error[E0282]: type annotations needed
@@ -30,10 +27,7 @@ error[E0282]: type annotations needed
   |         ^^^^^^^^^^^^ cannot infer type
 ```
 
-Unfortunately, there's currently no way to "give `fut` a type", nor a way
-to explicitly specify the return type of an `async` block.
-To work around this, use the "turbofish" operator to supply the success and
-error types for the `async` block:
+不幸的是，目前还没有办法为 `fut` “指定类型”，也无法显式指定 `async` 块的返回类型。要解决这个问题，可以使用 `::<>` 操作符为 `async` 块提供成功和错误类型：
 
 ```rust,edition2018
 # struct MyError;
@@ -42,7 +36,7 @@ error types for the `async` block:
 let fut = async {
     foo().await?;
     bar().await?;
-    Ok::<(), MyError>(()) // <- note the explicit type annotation here
+    Ok::<(), MyError>(()) // <- 注意这里的显式类型声明
 };
 ```
 
